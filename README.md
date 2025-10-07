@@ -166,7 +166,7 @@ Produces:
 ┏━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ Setting            ┃ Value                                                       ┃
 ┡━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│ STATIC_URL         │ /static/                                                     │
+│ STATIC_URL         │ /static/                                                    │
 │ STATIC_ROOT        │ BASE_DIR / "staticfiles"                                    │
 │ STATICFILES_DIRS   │ ['assets', 'frontend/static']                               │
 │ STATICFILES_STORAGE│ 'django.contrib.staticfiles.storage.StaticFilesStorage'     │
