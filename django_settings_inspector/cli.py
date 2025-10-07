@@ -121,8 +121,44 @@ except ImportError:
                     return default or choices[0]
             return input("> ") or default
 
+
 # ----------------------------------------------------------------------
-# AUTO-DETECT SETTINGS
+# SETTINGS CACHE
+# ----------------------------------------------------------------------
+
+def _get_cache_path():
+    config_dir = os.getenv("APPDATA") or os.path.join(os.path.expanduser("~"), ".config")
+    cache_dir = os.path.join(config_dir, "djinspect")
+    os.makedirs(cache_dir, exist_ok=True)
+    return os.path.join(cache_dir, ".last_settings")
+
+def save_last_settings(module_name, project_path):
+    """Save last detected DJANGO_SETTINGS_MODULE + project path"""
+    try:
+        cache_file = _get_cache_path()
+        with open(cache_file, "w", encoding="utf-8") as f:
+            f.write(f"{module_name}|{project_path}")
+    except Exception as e:
+        print(f"⚠️ Failed to save cache: {e}", file=sys.stderr)
+
+def load_last_settings():
+    """Load last DJANGO_SETTINGS_MODULE + project path from cache"""
+    cache_file = _get_cache_path()
+    if os.path.exists(cache_file):
+        try:
+            with open(cache_file, "r", encoding="utf-8") as f:
+                data = f.read().strip()
+                if "|" in data:
+                    module_name, project_path = data.split("|", 1)
+                    return module_name.strip(), project_path.strip()
+                else:
+                    return data.strip(), None
+        except Exception:
+            return None, None
+    return None, None
+
+# ----------------------------------------------------------------------
+# AUTO DETECT SETTINGS
 # ----------------------------------------------------------------------
 
 def auto_detect_settings(file_path=None):
@@ -138,16 +174,19 @@ def auto_detect_settings(file_path=None):
                 found.append(os.path.join(dirpath, filename))
         return found
 
-    # Step 1: If user provides file (-f), use it
-    target_file = file_path
+    # Step 1: Determine search base
+    # If user provides file (-f), use its directory as search base
+    search_base = None
+    if file_path:
+        abs_path = os.path.abspath(file_path)
+        search_base = os.path.dirname(abs_path) if os.path.isfile(abs_path) else abs_path
+    else:
+        search_base = os.getcwd()
 
-    # Step 2: Otherwise, auto-search recursively
-    if not target_file:
-        found_files = search_recursive(os.getcwd())
-        if not found_files:
-            print("❌ settings.py not found recursively in current directory.", file=sys.stderr)
-            sys.exit(1)
+    # Step 2: Always try to search downward from base
+    found_files = search_recursive(search_base)
 
+    if found_files:
         # If multiple found → ask user which one to use
         if len(found_files) > 1:
             selected = Prompt.ask(
@@ -158,6 +197,19 @@ def auto_detect_settings(file_path=None):
             target_file = selected
         else:
             target_file = found_files[0]
+    else:
+        # No new settings.py found → fallback to cache
+        cached_module, cached_path = load_last_settings()
+        if cached_module:
+            os.environ["DJANGO_SETTINGS_MODULE"] = cached_module
+            if cached_path and os.path.exists(cached_path):
+                if cached_path not in sys.path:
+                    sys.path.insert(0, cached_path)
+            print(f"✅ Using cached settings module: {cached_module}")
+            return cached_module
+
+        print("❌ settings.py not found recursively in current directory or provided path.", file=sys.stderr)
+        sys.exit(1)
 
     # Step 3: Read file and extract ROOT_URLCONF or DJANGO_SETTINGS_MODULE
     try:
@@ -191,12 +243,15 @@ def auto_detect_settings(file_path=None):
     target_dir = os.path.dirname(os.path.abspath(target_file))
     parent_dir = os.path.dirname(target_dir)
 
-    # Add both to sys.path (project and parent)
     for path in [target_dir, parent_dir]:
         if path not in sys.path:
             sys.path.insert(0, path)
 
     print(f"✅ Using settings module: {module_name}")
+
+    # Step 6: Save to cache
+    save_last_settings(module_name, parent_dir)
+
     return module_name
 
 # ----------------------------------------------------------------------
