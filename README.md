@@ -203,23 +203,23 @@ Produces:
 
 | Command                   | Description                          |
 | ------------------------- | ------------------------------------ |
-| `django-admin all`        | Show all settings (merged view)      |
-| `django-admin core`       | Show core Django settings            |
-| `django-admin db`         | Show database-related settings       |
-| `django-admin auth`       | Show authentication settings         |
-| `django-admin cache`      | Show cache settings                  |
-| `django-admin logging`    | Show logging configuration           |
-| `django-admin security`   | Show security settings               |
-| `django-admin email`      | Show email settings                  |
-| `django-admin session`    | Show session settings                |
-| `django-admin site`       | Show site-related settings           |
-| `django-admin static`     | Show static file configuration       |
-| `django-admin storage`    | Show media and file storage settings |
-| `django-admin template`   | Show template settings               |
-| `django-admin locale`     | Show i18n/l10n and timezone settings |
-| `django-admin installed`  | List installed apps                  |
-| `django-admin middleware` | List middleware components           |
-| `django-admin validator`  | Validate settings consistency        |
+| `djinspect/manage all`        | Show all settings (merged view)      |
+| `djinspect/manage core`       | Show core Django settings            |
+| `djinspect/manage db`         | Show database-related settings       |
+| `djinspect/manage auth`       | Show authentication settings         |
+| `djinspect/manage cache`      | Show cache settings                  |
+| `djinspect/manage logging`    | Show logging configuration           |
+| `djinspect/manage security`   | Show security settings               |
+| `djinspect/manage email`      | Show email settings                  |
+| `djinspect/manage session`    | Show session settings                |
+| `djinspect/manage site`       | Show site-related settings           |
+| `djinspect/manage static`     | Show static file configuration       |
+| `djinspect/manage storage`    | Show media and file storage settings |
+| `djinspect/manage template`   | Show template settings               |
+| `djinspect/manage locale`     | Show i18n/l10n and timezone settings |
+| `djinspect/manage installed`  | List installed apps                  |
+| `djinspect/manage middleware` | List middleware components           |
+| `djinspect/manage validator`  | Validate settings consistency        |
 
 ---
 
@@ -491,3 +491,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 MIT © 2025 [Hadi Cahyadi](mailto:cumulus13@gmail.com)
 
+## author
+[Hadi Cahyadi](mailto:cumulus13@gmail.com)
+    
+
+[![Buy Me a Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/cumulus13)
+
+[![Donate via Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/cumulus13)
+ 
+[Support me on Patreon](https://www.patreon.com/cumulus13)

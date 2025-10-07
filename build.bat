@@ -1,6 +1,9 @@
 @echo off
 setlocal
 
+set "p=%~p0"
+for %%A in (%p:\= %) do set "folder=%%~A"
+
 :: Clean the old folder
 rmdir /s /q dist
 rmdir /s /q build
@@ -10,24 +13,24 @@ rmdir /s /q __pycache__
 :: Run the Build
 python setup.py sdist bdist_wheel
 if errorlevel 1 (
-    sendgrowl richcolorlog BuildEvent "Build Failed" "An error occurs when building package!" -p 2
+    sendgrowl %folder% BuildEvent "Build Failed" "An error occurs when building package!" -p 2
     exit /b 1
 )
 
 :: Upload ke repository
 twine upload dist\* -r pypihub
 if errorlevel 1 (
-    sendgrowl richcolorlog UploadEvent "Upload Failed" "Failed to upload to the pypi!" -p 2
+    sendgrowl %folder% UploadEvent "Upload Failed" "Failed to upload to the pypi!" -p 2
     exit /b 1
 )
 
 twine upload dist\*
-if errorlevel 1 (
-    sendgrowl richcolorlog UploadEvent "Upload Failed" "Failed to upload to Pypi Default!" -p 2
-    exit /b 1
-)
+rem if errorlevel 1 (
+rem     sendgrowl %folder% UploadEvent "Upload Failed" "Failed to upload to Pypi Default!" -p 2
+rem     exit /b 1
+rem )
 
 :: If everything works
-sendgrowl richcolorlog BuildEvent "Build Success" "Build and Upload SUCCESSFUL!" -p 0
+sendgrowl %folder% BuildEvent "Build Success" "Build and Upload SUCCESSFUL!" -p 0
 
 endlocal

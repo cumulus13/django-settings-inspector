@@ -4,7 +4,7 @@ from pathlib import Path
 import traceback
 import shutil
 
-NAME = "django-settings-inspector"
+NAME = "django_settings_inspector"
 this_directory = os.path.abspath(os.path.dirname(__file__))
 
 if (Path(__file__).parent / '__version__.py').is_file():
@@ -29,7 +29,7 @@ def get_version():
                         if len(parts) == 2:
                             return parts[1].strip().strip('"').strip("'")
     except Exception as e:
-        if os.getenv('TRACEBACK') and os.getenv('TRACEBACK', "0").lower() in ['1', 'true', 'yes']
+        if os.getenv('TRACEBACK') and os.getenv('TRACEBACK', "0").lower() in ['1', 'true', 'yes']:
             print(traceback.format_exc())
         else:
             print(f"ERROR: {e}")
@@ -50,7 +50,7 @@ setup(
     license="MIT",
     packages=find_packages(),
     include_package_data=True,
-    python_requires=">=3.8",
+
     install_requires=[
         "Django>=3.2",
         "rich>=13.0",
